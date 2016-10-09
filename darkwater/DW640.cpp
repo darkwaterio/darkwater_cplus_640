@@ -173,7 +173,7 @@ void DW640::setAllPWMuS(float length_uS) {
 void setPin(uint8_t channel, uint8_t value) {
 
 	if( channel < 0 || channel > 15 ) {
-		fprintf("PWM pin must be between 0 and 15 inclusive");
+		fprintf(stderr, "PWM pin must be between 0 and 15 inclusive");
 	}
 
 	if( value == 0 ) {
@@ -181,22 +181,22 @@ void setPin(uint8_t channel, uint8_t value) {
 	} else if( value == 1 ) {
 		setPWM( channel, 4096, 0 );
 	} else {
-		fprintf("Pin value must be 0 or 1!");
+		fprintf(stderr, "Pin value must be 0 or 1!");
 	}
 }
 
 void setAllPin(uint8_t value) {
 
 	if( channel < 0 || channel > 15 ) {
-		fprintf("PWM pin must be between 0 and 15 inclusive");
+		fprintf(stderr, "PWM pin must be between 0 and 15 inclusive");
 	}
 
 	if( value == 0 ) {
-		setAllPWM( channel, 0, 4096 );
+		setAllPWM( 0, 4096 );
 	} else if( value == 1 ) {
-		setAllPWM( channel, 4096, 0 );
+		setAllPWM( 4096, 0 );
 	} else {
-		fprintf("Pin value must be 0 or 1!");
+		fprintf(stderr, "Pin value must be 0 or 1!");
 	}
 
 }
