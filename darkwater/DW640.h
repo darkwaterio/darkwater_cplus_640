@@ -41,20 +41,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define DW640_DEFAULT_ADDRESS     0x60 // 640 default
 
-#define DW_FORWARD                0x00
-#define DW_REVERSE                0x01
-#define DW_BRAKEFORWARD           0x06
-#define DW_BRAKEREVERSE           0x07
-#define DW_STOP                   0x08
-#define DW_COAST                  0x07
+#define DW_FORWARD                1
+#define DW_REVERSE                2
+#define DW_BRAKEFORWARD           3
+#define DW_BRAKEREVERSE           4
+#define DW_STOP                   5
+#define DW_COAST                  6
 
-#define DW_SINGLE                 0x07
-#define DW_DOUBLE                 0x07
-#define DW_INTERLEAVE             0x07
-#define DW_MICROSTEP              0x07
+#define DW_SINGLE                 1
+#define DW_DOUBLE                 2
+#define DW_INTERLEAVE             3
+#define DW_MICROSTEP              4
 
-#define DW_ININ                   0x07
-#define DW_PHASE                  0x07
+#define DW_ININ                   5
+#define DW_PHASE                  6
 
 class DW640 {
     public:
@@ -63,40 +63,44 @@ class DW640 {
         void initialize();
         bool testConnection();
 
-        float getMode();
-        void setMode(float frequency);
+        // float getFrequency();
+        // void setFrequency(float frequency);
 
-        void setPin(uint8_t channel, uint16_t value);
-        void setAllPin(uint16_t value);
+        // float getMode();
+        // void setMode(float frequency);
 
-        void setPWM(uint8_t channel, uint16_t offset, uint16_t length);
-        void setPWM(uint8_t channel, uint16_t length);
-        void setPWMmS(uint8_t channel, float length_mS);
-        void setPWMuS(uint8_t channel, float length_uS);
+        // void setPin(uint8_t channel, uint16_t value);
+        // void setAllPin(uint16_t value);
 
-        void setAllPWM(uint16_t offset, uint16_t length);
-        void setAllPWM(uint16_t length);
-        void setAllPWMmS(float length_mS);
-        void setAllPWMuS(float length_uS);
+        // void setPWM(uint8_t channel, uint16_t offset, uint16_t length);
+        // void setPWM(uint8_t channel, uint16_t length);
+        // void setPWMmS(uint8_t channel, float length_mS);
+        // void setPWMuS(uint8_t channel, float length_uS);
 
-        void allOff(uint16_t value);
+        // void setAllPWM(uint16_t offset, uint16_t length);
+        // void setAllPWM(uint16_t length);
+        // void setAllPWMmS(float length_mS);
+        // void setAllPWMuS(float length_uS);
 
-        void setMotorSpeed(uint8_t motor, uint16_t speed);
-        void setMotorOff(uint8_t motor);
+        // void allOff(uint16_t value);
 
-        void setServoOff(uint8_t servo);
-        void setServoPWMmS(uint8_t servo, float length_mS);
-        void setServoPWMuS(uint8_t servo, float length_uS);
+        // void setMotorSpeed(uint8_t motor, uint16_t speed);
+        // void setMotorOff(uint8_t motor);
 
-        void setStepperOff(uint8_t stepper);
-        void setStepperSpeed(uint8_t stepper, uint16_t speed);
-        void oneStep(uint8_t stepper, uint8_t direction, uint8_t style);
-        void step(uint8_t stepper, uint16_t steps, uint8_t direction, uint8_t style);
+        // void setServoOff(uint8_t servo);
+        // void setServoPWMmS(uint8_t servo, float length_mS);
+        // void setServoPWMuS(uint8_t servo, float length_uS);
+
+        // void setStepperOff(uint8_t stepper);
+        // void setStepperSpeed(uint8_t stepper, uint16_t speed);
+        // void oneStep(uint8_t stepper, uint8_t direction, uint8_t style);
+        // void step(uint8_t stepper, uint16_t steps, uint8_t direction, uint8_t style);
 
      private:
         uint8_t devAddr;
         float frequency;
         uint8_t mode;
+        PCA9685 pwm;
 };
 
 #endif // DW640_H
