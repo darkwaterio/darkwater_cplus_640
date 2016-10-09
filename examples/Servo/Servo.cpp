@@ -21,7 +21,7 @@ make
 #include "darkwater/PCA9685.h"
 #include "darkwater/Util.h"
 
-using namespace Navio;
+using namespace DarkWater;
 
 int main()
 {
