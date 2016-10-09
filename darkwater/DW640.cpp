@@ -50,6 +50,9 @@ bool DW640::initialize() {
     }
     // set the default frequency
     setFrequency( 100 );
+    // Create the mode pin
+    this->modePin = new Pin( RPI_GPIO_27 );
+    this->modePin->setMode(Pin::GpioModeOutput);
     // set the default mode to ININ
     setMode( DW_ININ );
     
@@ -89,7 +92,6 @@ uint8_t DW640::getMode() {
  * @param Frequency in Hz
  */
 void DW640::setMode(uint8_t mode) {
-    this->modePin = new Pin( RPI_GPIO_27 );
-    this->modePin->setMode(this->modePin->GpioModeOutput);
     this->modePin->write( mode );
+    this->mode = mode;
 }
