@@ -44,6 +44,13 @@ DW640::DW640(uint8_t address) {
  */
 void DW640::initialize() {
     this->pwm = new PCA9685( this->devAddr );
+    if (!testConnection() ) {
+    	printf("No 640 board found\n");
+    	return 0;		
+    }
+
+    this->pwm->setFrequency( 100 );
+    
 }
 
 /** Verify the I2C connection.
