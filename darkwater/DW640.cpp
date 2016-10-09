@@ -52,6 +52,9 @@ bool DW640::initialize() {
     setFrequency( 100 );
     // Create the mode pin
     this->modePin = new Pin( RPI_GPIO_27 );
+    if (!this->modePin->init()) {
+    	fprintf(stderr, "Pin Mode can not be set. Are you root?");
+    }
     this->modePin->setMode(Pin::GpioModeOutput);
     // set the default mode to ININ
     setMode( DW_ININ );
