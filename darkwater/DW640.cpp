@@ -50,5 +50,5 @@ void DW640::initialize() {
  * @return True if connection is valid, false otherwise
  */
 bool DW640::testConnection() {
-    return this->pwm->testConnection();
+    return this->pwm.testConnection();
 }

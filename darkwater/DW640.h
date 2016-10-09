@@ -100,7 +100,7 @@ class DW640 {
         uint8_t devAddr;
         float frequency;
         uint8_t mode;
-        PCA9685 pwm;
+        PCA9685* pwm;
 };
 
 #endif // DW640_H
