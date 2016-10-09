@@ -89,7 +89,7 @@ uint8_t DW640::getMode() {
  * @param Frequency in Hz
  */
 void DW640::setMode(uint8_t mode) {
-    this->modePin = new PIN( RPI_GPIO_27 );
+    this->modePin = new Pin( RPI_GPIO_27 );
     this->modePin->setMode(Pin::GpioModeOutput);
     this->modePin->write( mode );
 }

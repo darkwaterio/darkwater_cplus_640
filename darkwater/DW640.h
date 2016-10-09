@@ -102,7 +102,7 @@ class DW640 {
         float frequency;
         uint8_t mode;
         PCA9685* pwm;
-        PIN* modePin;
+        Pin* modePin;
 };
 
 #endif // DW640_H
