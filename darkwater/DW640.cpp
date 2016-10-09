@@ -252,7 +252,7 @@ void DW640::setMotorOff(uint8_t motor) {
 
 void DW640::runMotor( uint8_t control, uint8_t in1, uint8_t in2, uint16_t speed ) {
 	// get the mode
-	if( getMode() = DW_PHASE ) {
+	if( getMode() == DW_PHASE ) {
 		if( control == DW_FORWARD ) {
 				setPin( in2, 0 );
 				setPWM( in1, 0, speed * 16 );
