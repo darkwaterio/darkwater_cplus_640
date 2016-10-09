@@ -10,8 +10,8 @@ make
 sudo ./threaded_baro
 */
 
-#include "Navio/MS5611.h"
-#include "Navio/Util.h"
+#include "darkwater/MS5611.h"
+#include "darkwater/Util.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <pthread.h>
