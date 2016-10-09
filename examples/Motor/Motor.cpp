@@ -27,6 +27,14 @@ int main()
 	DW640 dw;
 	dw.initialize();
 
+	dw.setMotorOff( 1 );
+	dw.setMotorSpeed( 1, 200 );
+	sleep(5);
+	dw.setMotorOff( 1 );
+	sleep(5);
+	dw.setMotorSpeed( 1, -200 );
+	sleep(5);
+	dw.setMotorOff( 1 );
 
 
 }

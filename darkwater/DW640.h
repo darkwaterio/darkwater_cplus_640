@@ -85,10 +85,11 @@ class DW640 {
         void setPin(uint8_t channel, uint8_t value);
         void setAllPin(uint8_t value);
 
-        // void allOff(uint16_t value);
+        void allOff();
 
-        // void setMotorSpeed(uint8_t motor, uint16_t speed);
-        // void setMotorOff(uint8_t motor);
+        void setMotorSpeed(uint8_t motor, uint16_t speed);
+        void setMotorOff(uint8_t motor);
+        void runMotor( uint8_t control, uint8_t in1, uint8_t in2, uint16_t speed );
 
         // void setServoOff(uint8_t servo);
         // void setServoPWMmS(uint8_t servo, float length_mS);
@@ -105,6 +106,8 @@ class DW640 {
         uint8_t mode;
         PCA9685* pwm;
         Pin* modePin;
+
+
 };
 
 #endif // DW640_H
