@@ -38,6 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <math.h>
 #include <string>
 #include "PCA9685.h"
+#include "gpio.h"
 
 #define DW640_DEFAULT_ADDRESS     0x60 // 640 default
 
@@ -53,8 +54,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DW_INTERLEAVE             3
 #define DW_MICROSTEP              4
 
-#define DW_ININ                   5
-#define DW_PHASE                  6
+#define DW_ININ                   0
+#define DW_PHASE                  1
 
 class DW640 {
     public:
@@ -63,11 +64,11 @@ class DW640 {
         bool initialize();
         bool testConnection();
 
-        // float getFrequency();
-        // void setFrequency(float frequency);
+        float getFrequency();
+        void setFrequency(float frequency);
 
-        // float getMode();
-        // void setMode(float frequency);
+        uint8_t getMode();
+        void setMode(uint8_t mode);
 
         // void setPin(uint8_t channel, uint16_t value);
         // void setAllPin(uint16_t value);
@@ -101,6 +102,7 @@ class DW640 {
         float frequency;
         uint8_t mode;
         PCA9685* pwm;
+        PIN* modePin;
 };
 
 #endif // DW640_H

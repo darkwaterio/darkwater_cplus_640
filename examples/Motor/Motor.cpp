@@ -27,10 +27,6 @@ int main()
 	DW640 dw;
 	dw.initialize();
 
-	if(dw.testConnection()) {
-		printf("OK %4.f ", 2000);
-	} else {
-		printf("Not Ok %4.f ", 1000);
-	}
 
-	}
+
+}

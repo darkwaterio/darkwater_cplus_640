@@ -48,8 +48,10 @@ bool DW640::initialize() {
     	printf("No 640 board found\n");
     	return 0;		
     }
-
-    this->pwm->setFrequency( 100 );
+    // set the default frequency
+    setFrequency( 100 );
+    // set the default mode to ININ
+    setMode( DW_ININ );
     
 }
 
@@ -58,4 +60,36 @@ bool DW640::initialize() {
  */
 bool DW640::testConnection() {
     return this->pwm->testConnection();
+}
+
+/** Calculate prescale value based on the specified frequency and write it to the device.
+ * @return Frequency in Hz
+ */
+float DW640::getFrequency() {
+    return this->pwm->getFrequency();
+}
+
+
+/** Calculate prescale value based on the specified frequency and write it to the device.
+ * @param Frequency in Hz
+ */
+void DW640::setFrequency(float frequency) {
+    this->pwm->setFrequency( frequency );
+}
+
+/** Calculate prescale value based on the specified frequency and write it to the device.
+ * @return Frequency in Hz
+ */
+uint8_t DW640::getMode() {
+    return this->mode;
+}
+
+
+/** Calculate prescale value based on the specified frequency and write it to the device.
+ * @param Frequency in Hz
+ */
+void DW640::setMode(uint8_t mode) {
+    this->modePin = new PIN( RPI_GPIO_27 );
+    this->modePin->setMode(Pin::GpioModeOutput);
+    this->modePin->write( mode );
 }
