@@ -29,6 +29,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "DW640.h"
 
+using namespace DarkWater;
+
 /** PCA9685 constructor.
  * @param address I2C address
  * @see DW640_DEFAULT_ADDRESS
