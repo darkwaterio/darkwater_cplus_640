@@ -28,12 +28,16 @@ int main()
 	dw.initialize();
 
 	dw.setMotorOff( 1 );
+	printf("forward\n");
 	dw.setMotorSpeed( 1, 200 );
 	sleep(5);
+	printf("stop\n");
 	dw.setMotorOff( 1 );
 	sleep(5);
+	printf("reverse\n");
 	dw.setMotorSpeed( 1, -200 );
 	sleep(5);
+	printf("stop\n");
 	dw.setMotorOff( 1 );
 
 
