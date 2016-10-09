@@ -264,6 +264,7 @@ void DW640::runMotor( uint8_t control, uint8_t in1, uint8_t in2, uint16_t speed 
 					setPin( in1, 0 );
 				}
 	} else {	// DW_ININ
+		printf( speed );
 		if( control == DW_FORWARD ) {
 			setPin( in2, 0 );
 			setPWM( in1, 0, speed * 16 );
