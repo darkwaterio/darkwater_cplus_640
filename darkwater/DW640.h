@@ -57,6 +57,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DW_ININ                   0
 #define DW_PHASE                  1
 
+using namespace DarkWater;
+
 class DW640 {
     public:
         DW640(uint8_t address = DW640_DEFAULT_ADDRESS);
