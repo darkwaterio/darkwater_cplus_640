@@ -235,10 +235,13 @@ void DW640::setMotorSpeed(uint8_t motor, uint16_t speed) {
 		} else if( speed > 1500 && speed <= 2000 ) {
 
 			} else if( speed > 0 && speed <= 255 ) {
+				printf("fwd %d", speed);
 				runMotor( DW_FORWARD, in1, in2, speed );
 				} else if( speed < 0 && speed >= -255 ) {
+					printf("rv %d", speed);
 					runMotor( DW_REVERSE, in1, in2, abs(speed) );
 					} else if( speed == 0 || speed == 1500 ) {
+						printf("stp %d", speed);
 						runMotor( DW_STOP, in1, in2, speed );
 					}
 
