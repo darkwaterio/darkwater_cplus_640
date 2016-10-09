@@ -27,18 +27,18 @@ int main()
 	DW640 dw;
 	dw.initialize();
 
-	dw.setMotorOff( 1 );
+	dw.setMotorSpeed( 1, 0 );
 	printf("forward\n");
 	dw.setMotorSpeed( 1, 200 );
-	sleep(5);
+	usleep(5000000);
 	printf("stop\n");
-	dw.setMotorOff( 1 );
-	sleep(5);
+	dw.setMotorSpeed( 1, 0 );
+	usleep(5000000);
 	printf("reverse\n");
 	dw.setMotorSpeed( 1, -200 );
-	sleep(5);
+	usleep(5000000);
 	printf("stop\n");
-	dw.setMotorOff( 1 );
+	dw.setMotorSpeed( 1, 0 );
 
 
 }
