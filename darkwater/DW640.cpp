@@ -42,7 +42,7 @@ DW640::DW640(uint8_t address) {
  * Then it enables auto-increment of register address to allow for faster writes.
  * And finally the restart is performed to enable clocking.
  */
-void DW640::initialize() {
+bool DW640::initialize() {
     this->pwm = new PCA9685( this->devAddr );
     if (!testConnection() ) {
     	printf("No 640 board found\n");

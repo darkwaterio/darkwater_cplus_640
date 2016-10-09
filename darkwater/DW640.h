@@ -60,7 +60,7 @@ class DW640 {
     public:
         DW640(uint8_t address = DW640_DEFAULT_ADDRESS);
 
-        void initialize();
+        bool initialize();
         bool testConnection();
 
         // float getFrequency();
