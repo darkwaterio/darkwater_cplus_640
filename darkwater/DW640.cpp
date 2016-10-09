@@ -195,7 +195,7 @@ void DW640::allOff() {
 
 /* DC Motor specific code */
 
-void DW640::setMotorSpeed(uint8_t motor, uint16_t speed) {
+void DW640::setMotorSpeed(uint8_t motor, int16_t speed) {
 
 	uint8_t in1;
 	uint8_t in2;
@@ -267,17 +267,20 @@ void DW640::runMotor( uint8_t control, uint8_t in1, uint8_t in2, uint16_t speed 
 					setPin( in1, 0 );
 				}
 	} else {	// DW_ININ
-		printf( "here" );
 		if( control == DW_FORWARD ) {
+			printf( "FWD %d %d %d \n", speed, in1, in2 );
 			setPin( in2, 0 );
 			setPWM( in1, 0, speed * 16 );
 			} else if( control == DW_REVERSE ) {
+				printf( "REV %d %d %d \n", speed, in1, in2 );
 				setPin( in1, 0 );
 				setPWM( in2, 0, speed * 16 );
 				} else if( control == DW_STOP ) {
+					printf( "STP %d %d %d \n", speed, in1, in2 );
 					setPin( in1, 1 );
 					setPin( in2, 1 );
 					} else if( control == DW_COAST ) {
+						printf( "CST %d %d %d \n", speed, in1, in2 );
 						setPin( in1, 0 );
 						setPin( in2, 0 );
 					}

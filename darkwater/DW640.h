@@ -87,7 +87,7 @@ class DW640 {
 
         void allOff();
 
-        void setMotorSpeed(uint8_t motor, uint16_t speed);
+        void setMotorSpeed(uint8_t motor, int16_t speed);
         void setMotorOff(uint8_t motor);
         void runMotor( uint8_t control, uint8_t in1, uint8_t in2, uint16_t speed );
 
