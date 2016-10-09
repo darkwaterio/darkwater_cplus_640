@@ -43,7 +43,7 @@ DW640::DW640(uint8_t address) {
  * And finally the restart is performed to enable clocking.
  */
 void DW640::initialize() {
-    PCA9685 this->pwm;
+    this->pwm = new PCA9685( this->devAddr );
 }
 
 /** Verify the I2C connection.
