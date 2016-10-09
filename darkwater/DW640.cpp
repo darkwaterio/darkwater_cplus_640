@@ -54,6 +54,7 @@ bool DW640::initialize() {
     this->modePin = new Pin( RPI_GPIO_27 );
     if (!this->modePin->init()) {
     	fprintf(stderr, "Pin Mode can not be set. Are you root?");
+    	return 0;
     }
     this->modePin->setMode(Pin::GpioModeOutput);
     // set the default mode to ININ
@@ -97,4 +98,105 @@ uint8_t DW640::getMode() {
 void DW640::setMode(uint8_t mode) {
     this->modePin->write( mode );
     this->mode = mode;
+}
+
+/** Set channel start offset of the pulse and it's length
+ * @param Channel number (0-15)
+ * @param Offset (0-4095)
+ * @param Length (0-4095)
+ * @see PCA9685_RA_LED0_ON_L
+ */
+void DW640::setPWM(uint8_t channel, uint16_t offset, uint16_t length) {
+	this->pwm->setPWM( channel, offset, length );
+}
+
+/** Set channel's pulse length
+ * @param Channel number (0-15)
+ * @param Length (0-4095)
+ * @see PCA9685_RA_LED0_ON_L
+ */
+void DW640::setPWM(uint8_t channel, uint16_t length) {
+    this->pwm->setPWM(channel, length);
+}
+
+/** Set channel's pulse length in milliseconds
+ * @param Channel number (0-15)
+ * @param Length in milliseconds
+ * @see PCA9685_RA_LED0_ON_L
+ */
+void DW640::setPWMmS(uint8_t channel, float length_mS) {
+    this->pwm->setPWMmS(channel, length_mS);
+}
+
+/** Set channel's pulse length in microseconds
+ * @param Channel number (0-15)
+ * @param Length in microseconds
+ * @see PCA9685_RA_LED0_ON_L
+ */
+void DW640::setPWMuS(uint8_t channel, float length_uS) {
+    this->pwm->setPWMuS(channel, length_uS);
+}
+
+/** Set start offset of the pulse and it's length for all channels
+ * @param Offset (0-4095)
+ * @param Length (0-4095)
+ * @see PCA9685_RA_ALL_LED_ON_L
+ */
+void DW640::setAllPWM(uint16_t offset, uint16_t length) {
+	this->pwm->setAllPWM(offset, length);
+}
+
+/** Set pulse length for all channels
+ * @param Length (0-4095)
+ * @see PCA9685_RA_ALL_LED_ON_L
+ */
+void DW640::setAllPWM(uint16_t length) {
+    this->pwm->setAllPWM(length);
+}
+
+/** Set pulse length in milliseconds for all channels
+ * @param Length in milliseconds
+ * @see PCA9685_RA_ALL_LED_ON_L
+ */
+void DW640::setAllPWMmS(float length_mS) {
+	this->pwm->setAllPWMmS(length_mS);
+}
+
+/** Set pulse length in microseconds for all channels
+ * @param Length in microseconds
+ * @see PCA9685_RA_ALL_LED_ON_L
+ */
+void DW640::setAllPWMuS(float length_uS) {
+	this->pwm->setAllPWMuS(length_uS);
+}
+
+void setPin(uint8_t channel, uint8_t value) {
+
+	if( channel < 0 || channel > 15 ) {
+		fprintf("PWM pin must be between 0 and 15 inclusive");
+	}
+
+	if( value == 0 ) {
+		setPWM( channel, 0, 4096 );
+	} else if( value == 1 ) {
+		setPWM( channel, 4096, 0 );
+	} else {
+		fprintf("Pin value must be 0 or 1!");
+	}
+}
+
+void setAllPin(uint8_t value) {
+
+	if( channel < 0 || channel > 15 ) {
+		fprintf("PWM pin must be between 0 and 15 inclusive");
+	}
+
+	if( value == 0 ) {
+		setAllPWM( channel, 0, 4096 );
+	} else if( value == 1 ) {
+		setAllPWM( channel, 4096, 0 );
+	} else {
+		fprintf("Pin value must be 0 or 1!");
+	}
+
 }

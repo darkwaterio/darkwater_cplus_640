@@ -72,18 +72,18 @@ class DW640 {
         uint8_t getMode();
         void setMode(uint8_t mode);
 
-        // void setPin(uint8_t channel, uint16_t value);
-        // void setAllPin(uint16_t value);
+        void setPWM(uint8_t channel, uint16_t offset, uint16_t length);
+        void setPWM(uint8_t channel, uint16_t length);
+        void setPWMmS(uint8_t channel, float length_mS);
+        void setPWMuS(uint8_t channel, float length_uS);
 
-        // void setPWM(uint8_t channel, uint16_t offset, uint16_t length);
-        // void setPWM(uint8_t channel, uint16_t length);
-        // void setPWMmS(uint8_t channel, float length_mS);
-        // void setPWMuS(uint8_t channel, float length_uS);
+        void setAllPWM(uint16_t offset, uint16_t length);
+        void setAllPWM(uint16_t length);
+        void setAllPWMmS(float length_mS);
+        void setAllPWMuS(float length_uS);
 
-        // void setAllPWM(uint16_t offset, uint16_t length);
-        // void setAllPWM(uint16_t length);
-        // void setAllPWMmS(float length_mS);
-        // void setAllPWMuS(float length_uS);
+        void setPin(uint8_t channel, uint8_t value);
+        void setAllPin(uint8_t value);
 
         // void allOff(uint16_t value);
 
