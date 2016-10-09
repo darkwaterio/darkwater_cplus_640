@@ -44,6 +44,7 @@ DW640::DW640(uint8_t address) {
  */
 bool DW640::initialize() {
     this->pwm = new PCA9685( this->devAddr );
+    this->pwm->initialize();
     if (!testConnection() ) {
     	printf("No 640 board found\n");
     	return 0;		
