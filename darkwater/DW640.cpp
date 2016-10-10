@@ -283,7 +283,7 @@ void DW640::runMotor( uint8_t control, uint8_t in1, uint8_t in2, uint16_t speed 
 
 /* Servo code */
 
-void setServoOff(uint8_t servo) {
+void DW640::setServoOff(uint8_t servo) {
 
 	switch(servo) {
 		case 1:
@@ -298,7 +298,7 @@ void setServoOff(uint8_t servo) {
 
 }
     
-void setServoPWMmS(uint8_t servo, float length_mS) {
+void DW640::setServoPWMmS(uint8_t servo, float length_mS) {
 
 	switch(servo) {
 		case 1:
@@ -313,7 +313,7 @@ void setServoPWMmS(uint8_t servo, float length_mS) {
 
 }
 
-void setServoPWMuS(uint8_t servo, float length_uS) {
+void DW640::setServoPWMuS(uint8_t servo, float length_uS) {
 
 	switch(servo) {
 		case 1:
