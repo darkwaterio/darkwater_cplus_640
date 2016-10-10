@@ -233,10 +233,8 @@ void DW640::setMotorSpeed(uint8_t motor, int16_t speed) {
 	// Speed deciphering for the two control modes
 	if( speed >= 1000 && speed < 1500 ) {
 		runMotor( DW_REVERSE, in1, in2, map(speed, 1500, 1000, 0, 255 ) );
-		printf( "%d - %d\n", speed, map(speed, 1500, 1000, 0, 255 ) );
 		} else if( speed > 1500 && speed <= 2000 ) {	
 			runMotor( DW_FORWARD, in1, in2, map(speed, 1500, 2000, 0, 255 ) );
-			printf( "%d - %d\n", speed, map(speed, 1500, 2000, 0, 255 ) );
 			} else if( speed > 0 && speed <= 255 ) {
 				runMotor( DW_FORWARD, in1, in2, speed );
 				} else if( speed < 0 && speed >= -255 ) {
@@ -250,7 +248,7 @@ void DW640::setMotorSpeed(uint8_t motor, int16_t speed) {
 }
 
 void DW640::setMotorOff(uint8_t motor) {
-
+	setMotorSpeed( motor, 0 );
 }
 
 void DW640::runMotor( uint8_t control, uint8_t in1, uint8_t in2, uint16_t speed ) {
@@ -281,6 +279,53 @@ void DW640::runMotor( uint8_t control, uint8_t in1, uint8_t in2, uint16_t speed 
 						setPin( in2, 0 );
 					}
 	}
+}
+
+/* Servo code */
+
+void setServoOff(uint8_t servo) {
+
+	switch(servo) {
+		case 1:
+				setPin( 0, 0 ); // Servo 1 is on PWM 0
+				break;
+		case 2:
+				setPin( 1, 0 ); // Servo 2 is on PWM 1
+				break;
+		default:
+				fprintf(stderr, "Servo number must be between 1 and 2 inclusive");
+	}
+
+}
+    
+void setServoPWMmS(uint8_t servo, float length_mS) {
+
+	switch(servo) {
+		case 1:
+				setPWMmS( 0, length_mS ); // Servo 1 is on PWM 0
+				break;
+		case 2:
+				setPWMmS( 0, length_mS ); // Servo 2 is on PWM 1
+				break;
+		default:
+				fprintf(stderr, "Servo number must be between 1 and 2 inclusive");
+	}
+
+}
+
+void setServoPWMuS(uint8_t servo, float length_uS) {
+
+	switch(servo) {
+		case 1:
+				setPWMuS( 0, length_uS ); // Servo 1 is on PWM 0
+				break;
+		case 2:
+				setPWMuS( 1, length_uS ); // Servo 2 is on PWM 1
+				break;
+		default:
+				fprintf(stderr, "Servo number must be between 1 and 2 inclusive");
+	}
+
 }
 
 /* Private functions */
