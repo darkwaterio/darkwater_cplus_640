@@ -24,7 +24,9 @@ int main()
     s1->off();
     s2->off();
 
+    printf("Start servo moves\n");
     for( int a = 10; a >= 0; a-- ) {
+        printf("Step %d\n", a);
         s1->setPWMmS(SERVO_MIN);
         s2->setPWMmS(SERVO_MIN);
         usleep(1000000);
