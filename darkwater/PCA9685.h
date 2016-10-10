@@ -4,6 +4,8 @@ Written by Mikhail Avkhimenia (mikhail.avkhimenia@emlid.com)
 Copyright (c) 2014, Emlid Limited
 All rights reserved.
 
+Modified by Dark Water (team@darkwater.io)
+
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
     * Redistributions of source code must retain the above copyright
@@ -43,10 +45,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define PCA9685_RA_MODE1            0x00
 #define PCA9685_RA_MODE2            0x01
+#define PCA9685_RA_SUBADR1          0x02    //I2C-bus subaddress 1
+#define PCA9685_RA_SUBADR2          0x03    //I2C-bus subaddress 2
+#define PCA9685_RA_SUBADR3          0x04    //I2C-bus subaddress 3
+#define PCA9685_RA_ALLCALLADR       0x05     //LED All Call I2C-bus address
 #define PCA9685_RA_LED0_ON_L        0x06
 #define PCA9685_RA_LED0_ON_H        0x07
 #define PCA9685_RA_LED0_OFF_L       0x08
 #define PCA9685_RA_LED0_OFF_H       0x09
+#define LED_MULTIPLYER 4  // For the other 15 channels
 #define PCA9685_RA_ALL_LED_ON_L     0xFA
 #define PCA9685_RA_ALL_LED_ON_H     0xFB
 #define PCA9685_RA_ALL_LED_OFF_L    0xFC
