@@ -35,11 +35,6 @@ int main()
 	DW_Motor *dw6 = dw.getMotor(6);
 
 	dw1->off();
-	dw1->setMotorSpeed( 200 );
-	usleep(1000000);
-	dw1->off();
-
-	dw1->off();
 	dw2->off();
 	dw3->off();
 	dw4->off();
