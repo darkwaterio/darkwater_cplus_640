@@ -1,6 +1,6 @@
 /*
 PCA9685 driver code is placed under the BSD license.
-Written by Team Dark Water (team@darkwater.io) based on the Adafruit Python Library
+Written by Team Dark Water (team@darkwater.io) based on the Adafruit Python Library and the Emlid PCA9685 library
 Copyright (c) 2014, Dark Water
 All rights reserved.
 
