@@ -29,10 +29,10 @@ int main()
 
 	DW_Motor *dw1 = dw.getMotor(1);
 
-	dw1.off();
-	dw1.setMotorSpeed( 200 );
+	dw1->off();
+	dw1->setMotorSpeed( 200 );
 	usleep(1000000);
-	dw1.off();
+	dw1->off();
 
 	// dw.setMotorOff(1);
 	// dw.setMotorOff(2);
