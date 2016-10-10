@@ -201,29 +201,31 @@ DW_Motor *DW640::getMotor(uint8_t motor) {
 	uint8_t in1;
 	uint8_t in2;
 
+	motor--;
+
 	// Get the motor
 	switch(motor) {
-		case 1:
+		case 0:
 				in2 = 2;
 				in1 = 3;
 				break;
-		case 2:
+		case 1:
 				in2 = 4;
 				in1 = 5;
 				break;
-		case 3:
+		case 2:
 				in2 = 6;
 				in1 = 7;
 				break;
-		case 4:
+		case 3:
 				in2 = 8;
 				in1 = 9;
 				break;
-		case 5:
+		case 4:
 				in2 = 10;
 				in1 = 11;
 				break;
-		case 6:
+		case 5:
 				in2 = 12;
 				in1 = 13;
 				break;
@@ -248,12 +250,14 @@ DW_Servo *DW640::getServo(uint8_t servo) {
 
 	uint8_t pin;
 
+	servo--;
+
 	// Get the servo
 	switch(servo) {
-		case 1:
+		case 0:
 				pin = 0; // Servo 1 is on PWM 0
 				break;
-		case 2:
+		case 1:
 				pin = 1; // Servo 2 is on PWM 1
 				break;
 		default:
