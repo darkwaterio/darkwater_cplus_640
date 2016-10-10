@@ -196,159 +196,196 @@ void DW640::allOff() {
 
 /* DC Motor specific code */
 
-void DW640::setMotorSpeed(uint8_t motor, int16_t speed) {
+DW_Motor *DW640::getMotor(uint8_t motor) {
 
 	uint8_t in1;
 	uint8_t in2;
 
+	motor--;
+
 	// Get the motor
 	switch(motor) {
-		case 1:
+		case 0:
 				in2 = 2;
 				in1 = 3;
 				break;
-		case 2:
+		case 1:
 				in2 = 4;
 				in1 = 5;
 				break;
-		case 3:
+		case 2:
 				in2 = 6;
 				in1 = 7;
 				break;
-		case 4:
+		case 3:
 				in2 = 8;
 				in1 = 9;
 				break;
-		case 5:
+		case 4:
 				in2 = 10;
 				in1 = 11;
 				break;
-		case 6:
+		case 5:
 				in2 = 12;
 				in1 = 13;
 				break;
 		default:
 				fprintf(stderr, "Motor number must be between 1 and 6 inclusive");
 	}
+
+	if(motors[motor].motor == 0) {
+		// We don't have one yet
+		motors[motor].motor = motor; // how many motors on one line?!?
+		motors[motor].DWC = this;
+
+		motors[motor].in1 = in1;
+		motors[motor].in2 = in2;
+	}
+
+	return &motors[motor];
+
+}
+
+DW_Servo *DW640::getServo(uint8_t servo) {
+
+	uint8_t pin;
+
+	servo--;
+
+	// Get the servo
+	switch(servo) {
+		case 0:
+				pin = 0; // Servo 1 is on PWM 0
+				break;
+		case 1:
+				pin = 1; // Servo 2 is on PWM 1
+				break;
+		default:
+				fprintf(stderr, "Servo number must be between 1 and 2 inclusive");
+	}
+
+	if(servos[servo].servo == 0) {
+		// We don't have one yet
+		servos[servo].servo = servo; // how many servos on one line?!?
+		servos[servo].DWC = this;
+
+		servos[servo].pin = pin;
+	}
+
+	return &servos[servo];
+
+}
+
+/* Motors code */
+
+DW_Motor::DW_Motor(void) {
+  DWC = NULL;
+  motor = 0;
+  in1 = in2 = 0;
+}
+
+void DW_Motor::setMotorSpeed(int16_t speed) {
+
 	// Speed deciphering for the two control modes
 	if( speed >= 1000 && speed < 1500 ) {
-		runMotor( DW_REVERSE, in1, in2, map(speed, 1500, 1000, 0, 255 ) );
+		run( DW_REVERSE, map(speed, 1500, 1000, 0, 255 ) );
 		} else if( speed > 1500 && speed <= 2000 ) {	
-			runMotor( DW_FORWARD, in1, in2, map(speed, 1500, 2000, 0, 255 ) );
+			run( DW_FORWARD, map(speed, 1500, 2000, 0, 255 ) );
 			} else if( speed > 0 && speed <= 255 ) {
-				runMotor( DW_FORWARD, in1, in2, speed );
+				run( DW_FORWARD, speed );
 				} else if( speed < 0 && speed >= -255 ) {
-					runMotor( DW_REVERSE, in1, in2, abs(speed) );
+					run( DW_REVERSE, abs(speed) );
 					} else if( speed == 0 || speed == 1500 ) {
-						runMotor( DW_STOP, in1, in2, speed );
+						run( DW_STOP, speed );
 					}
 
 	
 
 }
 
-void DW640::setMotorOff(uint8_t motor) {
-	setMotorSpeed( motor, 0 );
+void DW_Motor::off(void) {
+	setMotorSpeed( 0 );
 }
 
-void DW640::runMotor( uint8_t control, uint8_t in1, uint8_t in2, uint16_t speed ) {
+void DW_Motor::run( uint8_t control, uint16_t speed ) {
 	// get the mode
-	if( getMode() == DW_PHASE ) {
+	if( DWC->getMode() == DW_PHASE ) {
 		if( control == DW_FORWARD ) {
-				setPin( in2, 0 );
-				setPWM( in1, 0, speed * 16 );
+				DWC->setPin( in2, 0 );
+				DWC->setPWM( in1, 0, speed * 16 );
 			} else if( control == DW_REVERSE ) {
-					setPin( in2, 1 );
-					setPWM( in1, 0, speed * 16 );
+					DWC->setPin( in2, 1 );
+					DWC->setPWM( in1, 0, speed * 16 );
 				} else if( control == DW_STOP ) {
-					setPin( in2, 0 );
-					setPin( in1, 0 );
+					DWC->setPin( in2, 0 );
+					DWC->setPin( in1, 0 );
 				}
 	} else {	// DW_ININ
 		if( control == DW_FORWARD ) {
-			setPin( in2, 0 );
-			setPWM( in1, 0, speed * 16 );
+			DWC->setPin( in2, 0 );
+			DWC->setPWM( in1, 0, speed * 16 );
 			} else if( control == DW_REVERSE ) {
-				setPin( in1, 0 );
-				setPWM( in2, 0, speed * 16 );
+				DWC->setPin( in1, 0 );
+				DWC->setPWM( in2, 0, speed * 16 );
 				} else if( control == DW_STOP ) {
-					setPin( in1, 1 );
-					setPin( in2, 1 );
+					DWC->setPin( in1, 1 );
+					DWC->setPin( in2, 1 );
 					} else if( control == DW_COAST ) {
-						setPin( in1, 0 );
-						setPin( in2, 0 );
+						DWC->setPin( in1, 0 );
+						DWC->setPin( in2, 0 );
 					}
 	}
 }
 
+uint16_t DW_Motor::map(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
 /* Servo code */
 
-void DW640::setServoOff(uint8_t servo) {
+DW_Servo::DW_Servo(void) {
+  DWC = NULL;
+  servo = 0;
+  pin = 0;
+}
 
-	switch(servo) {
-		case 1:
-				setPin( 0, 0 ); // Servo 1 is on PWM 0
-				break;
-		case 2:
-				setPin( 1, 0 ); // Servo 2 is on PWM 1
-				break;
-		default:
-				fprintf(stderr, "Servo number must be between 1 and 2 inclusive");
-	}
+void DW_Servo::off(void) {
+
+	DWC->setPin( pin, 0 );
 
 }
     
-void DW640::setServoPWMmS(uint8_t servo, float length_mS) {
+void DW_Servo::setPWMmS(float length_mS) {
 
-	switch(servo) {
-		case 1:
-				setPWMmS( 0, length_mS ); // Servo 1 is on PWM 0
-				break;
-		case 2:
-				setPWMmS( 1, length_mS ); // Servo 2 is on PWM 1
-				break;
-		default:
-				fprintf(stderr, "Servo number must be between 1 and 2 inclusive");
-	}
+	DWC->setPWMmS( pin, length_mS ); // Servo 1 is on PWM 0
 
 }
 
-void DW640::setServoPWMuS(uint8_t servo, float length_uS) {
+void DW_Servo::setPWMuS(float length_uS) {
 
-	switch(servo) {
-		case 1:
-				setPWMuS( 0, length_uS ); // Servo 1 is on PWM 0
-				break;
-		case 2:
-				setPWMuS( 1, length_uS ); // Servo 2 is on PWM 1
-				break;
-		default:
-				fprintf(stderr, "Servo number must be between 1 and 2 inclusive");
-	}
+	DWC->setPWMuS( pin, length_uS ); // Servo 1 is on PWM 0
+	
 
 }
 
 /* Stepper functions */
 
-void DW640::setStepperOff(uint8_t stepper) {
+// void DW640::setStepperOff(uint8_t stepper) {
 
-}
+// }
 
-void DW640::setStepperSpeed(uint8_t stepper, uint16_t speed) {
+// void DW640::setStepperSpeed(uint8_t stepper, uint16_t speed) {
 
-}
+// }
 
-void DW640::oneStep(uint8_t stepper, uint8_t direction, uint8_t style) {
+// void DW640::oneStep(uint8_t stepper, uint8_t direction, uint8_t style) {
 
-}
+// }
 
-void DW640::step(uint8_t stepper, uint16_t steps, uint8_t direction, uint8_t style) {
-	
-}
+// void DW640::step(uint8_t stepper, uint16_t steps, uint8_t direction, uint8_t style) {
+
+// }
 
 /* Private functions */
 
-uint16_t DW640::map(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max)
-{
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}

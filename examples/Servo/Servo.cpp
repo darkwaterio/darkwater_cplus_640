@@ -18,20 +18,25 @@ int main()
     dw.initialize();
     dw.setFrequency(50);
 
-    dw.setServoOff( 1 );
-    dw.setServoOff( 2 );
+    DW_Servo *s1 = dw.getServo(1);
+    DW_Servo *s2 = dw.getServo(2);
 
+    s1->off();
+    s2->off();
+
+    printf("Start servo moves\n");
     for( int a = 10; a >= 0; a-- ) {
-        dw.setServoPWMmS(1, SERVO_MIN);
-        dw.setServoPWMmS(2, SERVO_MIN);
+        printf("Step %d\n", a);
+        s1->setPWMmS(SERVO_MIN);
+        s2->setPWMmS(SERVO_MIN);
         usleep(1000000);
-        dw.setServoPWMmS(1, SERVO_MAX);
-        dw.setServoPWMmS(2, SERVO_MAX);
+        s1->setPWMmS(SERVO_MAX);
+        s2->setPWMmS(SERVO_MAX);
         usleep(1000000);
     }
 
-    dw.setServoOff( 1 );
-    dw.setServoOff( 2 );
+    s1->off();
+    s2->off();
 
     return 0;
 }

@@ -59,6 +59,42 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using namespace DarkWater;
 
+class DW640;
+
+class DW_Motor {
+    public:
+        DW_Motor(void);
+        friend class DW640;
+
+        void setMotorSpeed(int16_t speed);
+        void off(void);
+        void run(uint8_t control, uint16_t speed );
+
+    private:
+        uint8_t in1, in2;
+        DW640 *DWC;
+        uint8_t motor;
+
+        uint16_t map(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max);
+
+};
+
+class DW_Servo {
+    public:
+        DW_Servo(void);
+        friend class DW640;
+
+        void off(void);
+        void setPWMmS(float length_mS);
+        void setPWMuS(float length_uS);
+
+    private:
+        uint8_t pin;
+        DW640 *DWC;
+        uint8_t servo;
+
+};
+
 class DW640 {
     public:
         DW640(uint8_t address = DW640_DEFAULT_ADDRESS);
@@ -87,18 +123,13 @@ class DW640 {
 
         void allOff();
 
-        void setMotorSpeed(uint8_t motor, int16_t speed);
-        void setMotorOff(uint8_t motor);
-        void runMotor( uint8_t control, uint8_t in1, uint8_t in2, uint16_t speed );
+        DW_Motor *getMotor(uint8_t motor);
+        DW_Servo *getServo(uint8_t servo);        
 
-        void setServoOff(uint8_t servo);
-        void setServoPWMmS(uint8_t servo, float length_mS);
-        void setServoPWMuS(uint8_t servo, float length_uS);
-
-        void setStepperOff(uint8_t stepper);
-        void setStepperSpeed(uint8_t stepper, uint16_t speed);
-        void oneStep(uint8_t stepper, uint8_t direction, uint8_t style);
-        void step(uint8_t stepper, uint16_t steps, uint8_t direction, uint8_t style = DW_SINGLE);
+        // void setStepperOff(uint8_t stepper);
+        // void setStepperSpeed(uint8_t stepper, uint16_t speed);
+        // void oneStep(uint8_t stepper, uint8_t direction, uint8_t style);
+        // void step(uint8_t stepper, uint16_t steps, uint8_t direction, uint8_t style = DW_SINGLE);
 
      private:
         uint8_t devAddr;
@@ -107,9 +138,19 @@ class DW640 {
         PCA9685* pwm;
         Pin* modePin;
 
-        uint16_t map(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max);
+        DW_Motor motors[6];
+        DW_Servo servos[2];
+
+        uint16_t revsteps; // # steps per revolution
+        uint8_t currentstep;
+
+        
 
 
 };
+
+// class DW_Stepper {
+
+// }
 
 #endif // DW640_H
