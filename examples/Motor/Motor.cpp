@@ -30,6 +30,8 @@ int main()
 	dw.setMotorSpeed( 1, 1500 );
 	printf("forward\n");
 	dw.setMotorSpeed( 1, 2000 );
+	dw.setMotorSpeed( 1, 1950 );
+	dw.setMotorSpeed( 1, 1900 );
 	dw.setMotorSpeed( 1, 1800 );
 	dw.setMotorSpeed( 1, 1700 );
 	dw.setMotorSpeed( 1, 1600 );
