@@ -77,7 +77,7 @@ class DW_Motor {
 
         uint16_t map(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max);
 
-}
+};
 
 class DW_Servo {
     public:
@@ -93,7 +93,7 @@ class DW_Servo {
         DW640 *DWC;
         uint8_t servo;
 
-}
+};
 
 class DW640 {
     public:
