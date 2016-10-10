@@ -305,7 +305,7 @@ void DW640::setServoPWMmS(uint8_t servo, float length_mS) {
 				setPWMmS( 0, length_mS ); // Servo 1 is on PWM 0
 				break;
 		case 2:
-				setPWMmS( 0, length_mS ); // Servo 2 is on PWM 1
+				setPWMmS( 1, length_mS ); // Servo 2 is on PWM 1
 				break;
 		default:
 				fprintf(stderr, "Servo number must be between 1 and 2 inclusive");
