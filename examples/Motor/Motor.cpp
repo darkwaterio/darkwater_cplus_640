@@ -30,6 +30,10 @@ int main()
 	dw.setMotorSpeed( 1, 1500 );
 	printf("forward\n");
 	dw.setMotorSpeed( 1, 2000 );
+	dw.setMotorSpeed( 1, 1800 );
+	dw.setMotorSpeed( 1, 1700 );
+	dw.setMotorSpeed( 1, 1600 );
+	dw.setMotorSpeed( 1, 1550 );
 	usleep(5000000);
 	printf("stop\n");
 	dw.setMotorSpeed( 1, 1500 );

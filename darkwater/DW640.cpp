@@ -232,9 +232,9 @@ void DW640::setMotorSpeed(uint8_t motor, int16_t speed) {
 	}
 	// Speed deciphering for the two control modes
 	if( speed >= 1000 && speed < 1500 ) {
-		printf( "%d - %d", speed, map(speed, 1500, 1000, 0, 255 ) );
+		printf( "%d - %d\n", speed, map(speed, 1500, 1000, 0, 255 ) );
 		} else if( speed > 1500 && speed <= 2000 ) {	
-			printf( "%d - %d", speed, map(speed, 1500, 2000, 0, 255 ) );
+			printf( "%d - %d\n", speed, map(speed, 1500, 2000, 0, 255 ) );
 			} else if( speed > 0 && speed <= 255 ) {
 				runMotor( DW_FORWARD, in1, in2, speed );
 				} else if( speed < 0 && speed >= -255 ) {
