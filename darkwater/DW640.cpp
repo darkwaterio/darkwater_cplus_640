@@ -232,17 +232,14 @@ void DW640::setMotorSpeed(uint8_t motor, int16_t speed) {
 	}
 	// Speed deciphering for the two control modes
 	if( speed >= 1000 && speed < 1500 ) {
-
-		} else if( speed > 1500 && speed <= 2000 ) {
-
+		printf( "%d - %d", speed, map(speed, 1500, 1000, 0, 255 ) );
+		} else if( speed > 1500 && speed <= 2000 ) {	
+			printf( "%d - %d", speed, map(speed, 1500, 2000, 0, 255 ) );
 			} else if( speed > 0 && speed <= 255 ) {
-				printf("fwd %d", speed);
 				runMotor( DW_FORWARD, in1, in2, speed );
 				} else if( speed < 0 && speed >= -255 ) {
-					printf("rv %d", speed);
 					runMotor( DW_REVERSE, in1, in2, abs(speed) );
 					} else if( speed == 0 || speed == 1500 ) {
-						printf("stp %d", speed);
 						runMotor( DW_STOP, in1, in2, speed );
 					}
 
@@ -269,21 +266,24 @@ void DW640::runMotor( uint8_t control, uint8_t in1, uint8_t in2, uint16_t speed 
 				}
 	} else {	// DW_ININ
 		if( control == DW_FORWARD ) {
-			printf( "FWD %d %d %d \n", speed, in1, in2 );
 			setPin( in2, 0 );
 			setPWM( in1, 0, speed * 16 );
 			} else if( control == DW_REVERSE ) {
-				printf( "REV %d %d %d \n", speed, in1, in2 );
 				setPin( in1, 0 );
 				setPWM( in2, 0, speed * 16 );
 				} else if( control == DW_STOP ) {
-					printf( "STP %d %d %d \n", speed, in1, in2 );
 					setPin( in1, 1 );
 					setPin( in2, 1 );
 					} else if( control == DW_COAST ) {
-						printf( "CST %d %d %d \n", speed, in1, in2 );
 						setPin( in1, 0 );
 						setPin( in2, 0 );
 					}
 	}
+}
+
+/* Private functions */
+
+uint16_t DW640::map(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
