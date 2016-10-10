@@ -95,10 +95,10 @@ class DW640 {
         void setServoPWMmS(uint8_t servo, float length_mS);
         void setServoPWMuS(uint8_t servo, float length_uS);
 
-        // void setStepperOff(uint8_t stepper);
-        // void setStepperSpeed(uint8_t stepper, uint16_t speed);
-        // void oneStep(uint8_t stepper, uint8_t direction, uint8_t style);
-        // void step(uint8_t stepper, uint16_t steps, uint8_t direction, uint8_t style);
+        void setStepperOff(uint8_t stepper);
+        void setStepperSpeed(uint8_t stepper, uint16_t speed);
+        void oneStep(uint8_t stepper, uint8_t direction, uint8_t style);
+        void step(uint8_t stepper, uint16_t steps, uint8_t direction, uint8_t style = DW_SINGLE);
 
      private:
         uint8_t devAddr;

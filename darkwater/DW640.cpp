@@ -328,6 +328,24 @@ void DW640::setServoPWMuS(uint8_t servo, float length_uS) {
 
 }
 
+/* Stepper functions */
+
+void DW640::setStepperOff(uint8_t stepper) {
+
+}
+
+void DW640::setStepperSpeed(uint8_t stepper, uint16_t speed) {
+
+}
+
+void DW640::oneStep(uint8_t stepper, uint8_t direction, uint8_t style) {
+
+}
+
+void DW640::step(uint8_t stepper, uint16_t steps, uint8_t direction, uint8_t style) {
+	
+}
+
 /* Private functions */
 
 uint16_t DW640::map(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max)
