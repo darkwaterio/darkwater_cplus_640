@@ -18,12 +18,20 @@ int main()
     dw.initialize();
     dw.setFrequency(50);
 
-    while (true) {
+    dw.setServoOff( 1 );
+    dw.setServoOff( 2 );
+
+    for( int a = 10; a >= 0; a-- ) {
         dw.setServoPWMmS(1, SERVO_MIN);
+        dw.setServoPWMmS(2, SERVO_MIN);
         usleep(1000000);
         dw.setServoPWMmS(1, SERVO_MAX);
+        dw.setServoPWMmS(2, SERVO_MAX);
         usleep(1000000);
     }
+
+    dw.setServoOff( 1 );
+    dw.setServoOff( 2 );
 
     return 0;
 }
