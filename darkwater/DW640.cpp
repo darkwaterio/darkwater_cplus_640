@@ -284,15 +284,15 @@ void DW_Motor::setMotorSpeed(int16_t speed) {
 
 	// Speed deciphering for the two control modes
 	if( speed >= 1000 && speed < 1500 ) {
-		run( DW_REVERSE, in1, in2, map(speed, 1500, 1000, 0, 255 ) );
+		run( DW_REVERSE, map(speed, 1500, 1000, 0, 255 ) );
 		} else if( speed > 1500 && speed <= 2000 ) {	
-			run( DW_FORWARD, in1, in2, map(speed, 1500, 2000, 0, 255 ) );
+			run( DW_FORWARD, map(speed, 1500, 2000, 0, 255 ) );
 			} else if( speed > 0 && speed <= 255 ) {
-				run( DW_FORWARD, in1, in2, speed );
+				run( DW_FORWARD, speed );
 				} else if( speed < 0 && speed >= -255 ) {
-					run( DW_REVERSE, in1, in2, abs(speed) );
+					run( DW_REVERSE, abs(speed) );
 					} else if( speed == 0 || speed == 1500 ) {
-						run( DW_STOP, in1, in2, speed );
+						run( DW_STOP, speed );
 					}
 
 	
@@ -303,7 +303,7 @@ void DW_Motor::off(void) {
 	setMotorSpeed( 0 );
 }
 
-void DW_Motor::run( uint8_t control, uint8_t in1, uint8_t in2, uint16_t speed ) {
+void DW_Motor::run( uint8_t control, uint16_t speed ) {
 	// get the mode
 	if( DWC->getMode() == DW_PHASE ) {
 		if( control == DW_FORWARD ) {
