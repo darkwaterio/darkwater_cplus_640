@@ -59,6 +59,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using namespace DarkWater;
 
+class DW640;
+
 class DW_Motor {
     public:
         DW_Motor(void);
