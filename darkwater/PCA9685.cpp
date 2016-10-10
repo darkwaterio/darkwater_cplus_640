@@ -1,10 +1,8 @@
 /*
 PCA9685 driver code is placed under the BSD license.
-Written by Mikhail Avkhimenia (mikhail.avkhimenia@emlid.com)
-Copyright (c) 2014, Emlid Limited, www.emlid.com
+Written by Team Dark Water (team@darkwater.io) based on the Adafruit Python Library
+Copyright (c) 2014, Dark Water
 All rights reserved.
-
-Modified by Dark Water (team@darkwater.io)
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -74,16 +72,8 @@ void PCA9685::sleep() {
  * @see PCA9685_MODE1_RESTART_BIT
  */
 void PCA9685::restart() {
-
     I2Cdev::writeByte(devAddr, PCA9685_RA_MODE1, 0x00);
     I2Cdev::writeByte(devAddr, PCA9685_RA_MODE2, 0x04);
-
-    // I2Cdev::writeByte(devAddr, PCA9685_RA_MODE1, (1 << PCA9685_MODE1_SLEEP_BIT));
-    // I2Cdev::writeByte(devAddr, PCA9685_RA_MODE1, ((1 << PCA9685_MODE1_SLEEP_BIT) 
-    // 											| (1 << PCA9685_MODE1_EXTCLK_BIT)));
-    // I2Cdev::writeByte(devAddr, PCA9685_RA_MODE1, ((1 << PCA9685_MODE1_RESTART_BIT) 
-    //                                             | (1 << PCA9685_MODE1_EXTCLK_BIT)
-    //                                             | (1 << PCA9685_MODE1_AI_BIT)));
 }
 
 /** Calculate prescale value based on the specified frequency and write it to the device.
@@ -112,13 +102,6 @@ void PCA9685::setFrequency(float frequency) {
     I2Cdev::writeByte(devAddr, PCA9685_RA_MODE1, 0x04);
     this->frequency = getFrequency();
     restart();
-
-    // sleep();
-    // usleep(10000);
-    // uint8_t prescale = roundf(24576000.f / 4096.f / frequency)  - 1;
-    // I2Cdev::writeByte(devAddr, PCA9685_RA_PRE_SCALE, prescale);
-    // this->frequency = getFrequency();
-    // restart();
 }
 
 /** Set channel start offset of the pulse and it's length
@@ -134,19 +117,6 @@ void PCA9685::setPWM(uint8_t channel, uint16_t offset, uint16_t length) {
     I2Cdev::writeByte(devAddr, PCA9685_RA_LED0_ON_H + LED_MULTIPLYER * channel, offset >> 8);
     I2Cdev::writeByte(devAddr, PCA9685_RA_LED0_OFF_L + LED_MULTIPLYER * channel, length & 0xFF);
     I2Cdev::writeByte(devAddr, PCA9685_RA_LED0_OFF_H + LED_MULTIPLYER * channel, length >> 8);
-
-    // uint8_t data[4] = {0, 0, 0, 0};
-    // if(length == 0) {
-    //     data[3] = 0x10;
-    // } else if(length >= 4096) {
-    //     data[1] = 0x10;
-    // } else {
-    //     data[0] = offset & 0xFF;
-    //     data[1] = offset >> 8;
-    //     data[2] = length & 0xFF;
-    //     data[3] = length >> 8;
-    // }
-    // I2Cdev::writeBytes(devAddr, PCA9685_RA_LED0_ON_L + 4 * channel, 4, data);
 }
 
 /** Set channel's pulse length
@@ -181,15 +151,11 @@ void PCA9685::setPWMuS(uint8_t channel, float length_uS) {
  * @param Length (0-4095)
  * @see PCA9685_RA_ALL_LED_ON_L
  */
-void PCA9685::setAllPWM(uint16_t offset, uint16_t length) {
-    
+void PCA9685::setAllPWM(uint16_t offset, uint16_t length) {  
     I2Cdev::writeByte(devAddr, PCA9685_RA_ALL_LED_ON_L, offset & 0xFF);
     I2Cdev::writeByte(devAddr, PCA9685_RA_ALL_LED_ON_H, offset >> 8);
     I2Cdev::writeByte(devAddr, PCA9685_RA_ALL_LED_OFF_L, length & 0xFF);
     I2Cdev::writeByte(devAddr, PCA9685_RA_ALL_LED_OFF_H, length >> 8);
-
-    // uint8_t data[4] = {offset & 0xFF, offset >> 8, length & 0xFF, length >> 8};
-    // I2Cdev::writeBytes(devAddr, PCA9685_RA_ALL_LED_ON_L, 4, data);
 }
 
 /** Set pulse length for all channels
