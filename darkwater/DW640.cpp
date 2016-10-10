@@ -348,7 +348,7 @@ DW_Servo::DW_Servo(void) {
 
 void DW_Servo::off(void) {
 
-	DWC->SetPin( pin, 0 );
+	DWC->setPin( pin, 0 );
 
 }
     
