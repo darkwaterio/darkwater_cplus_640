@@ -91,9 +91,9 @@ class DW640 {
         void setMotorOff(uint8_t motor);
         void runMotor( uint8_t control, uint8_t in1, uint8_t in2, uint16_t speed );
 
-        // void setServoOff(uint8_t servo);
-        // void setServoPWMmS(uint8_t servo, float length_mS);
-        // void setServoPWMuS(uint8_t servo, float length_uS);
+        void setServoOff(uint8_t servo);
+        void setServoPWMmS(uint8_t servo, float length_mS);
+        void setServoPWMuS(uint8_t servo, float length_uS);
 
         // void setStepperOff(uint8_t stepper);
         // void setStepperSpeed(uint8_t stepper, uint16_t speed);
