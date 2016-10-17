@@ -282,7 +282,7 @@ DW_Servo *DW640::getServo(uint8_t servo) {
 
 }
 
-DW_Stepper *DW640::getStepper(uint16_t steps, uint8_t stepper) {
+DW_Stepper *DW640::getStepper(uint8_t stepper, uint16_t steps) {
 
   	num--;
 
@@ -451,7 +451,7 @@ void DW_Stepper::step(uint16_t steps, uint8_t dir,  uint8_t style) {
 
   	while (steps--) {
     	ret = onestep(dir, style);
-    	delayMicroseconds(uspers);
+    	usleep(uspers);
   	}
 }
 

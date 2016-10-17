@@ -148,7 +148,7 @@ class DW640 {
 
         DW_Motor *getMotor(uint8_t motor);
         DW_Servo *getServo(uint8_t servo);      
-        DW_Stepper *getStepper(uint16_t steps, uint8_t stepper);  
+        DW_Stepper *getStepper(uint8_t stepper, uint16_t steps = 48);  
 
      private:
         uint8_t devAddr;
