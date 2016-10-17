@@ -450,12 +450,12 @@ void DW_Stepper::step(uint16_t steps, uint8_t dir,  uint8_t style) {
   	}
 
   	while (steps--) {
-    	ret = onestep(dir, style);
+    	ret = oneStep(dir, style);
     	usleep(uspers);
   	}
 }
 
-uint8_t DW_Stepper::onestep(uint8_t dir, uint8_t style) {
+uint8_t DW_Stepper::oneStep(uint8_t dir, uint8_t style) {
   	uint8_t a, b, c, d;
   	uint8_t ocrb, ocra;
 

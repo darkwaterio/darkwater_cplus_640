@@ -104,7 +104,7 @@ class DW_Stepper {
 
         void off(void);
         void setMotorSpeed(uint16_t speed);
-        uint8_t onestep(uint8_t dir, uint8_t style);
+        uint8_t oneStep(uint8_t dir, uint8_t style);
         void step(uint16_t steps, uint8_t dir,  uint8_t style = DW_SINGLE);
         uint32_t usperstep;
 
