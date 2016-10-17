@@ -1,6 +1,6 @@
 /*
 Dark Water 640 driver code is placed under the BSD license.
-Written by Team Dark Water (team@darkwater.io)
+Written by Team Dark Water (team@darkwater.io) based off libraries by Adafruit https://github.com/adafruit/Adafruit_Motor_Shield_V2_Library
 Copyright (c) 2014, Dark Water
 All rights reserved.
 
@@ -316,12 +316,15 @@ DW_Stepper *DW640::getStepper(uint16_t steps, uint8_t stepper) {
 		// not init'd yet!
 		steppers[stepper].stepper = stepper;
 		steppers[stepper].revsteps = steps;
-		steppers[stepper].MC = this;
+		steppers[stepper].DWC = this;
 
 		steppers[stepper].AIN1pin = ain1;
 		steppers[stepper].AIN2pin = ain2;
 		steppers[stepper].BIN1pin = bin1;
 		steppers[stepper].BIN2pin = bin2;
+
+		// We need to set the board mode to ININ now that we have a stepper in existence
+		setMode(DW_ININ);
 	}
 	return &steppers[stepper];
 }
@@ -421,21 +424,167 @@ void DW_Servo::setPWMuS(float length_uS) {
 
 /* Stepper functions */
 
-// void DW640::setStepperOff(uint8_t stepper) {
+DW_Stepper::DW_Stepper(void) {
+  revsteps = stepper = currentstep = 0;
+}
 
-// }
+void DW_Stepper::setMotorSpeed(uint16_t rpm) {
 
-// void DW640::setStepperSpeed(uint8_t stepper, uint16_t speed) {
+  usperstep = 60000000 / ((uint32_t)revsteps * (uint32_t)rpm);
+}
 
-// }
+void DW_Stepper::off(void) {
+	DWC->setPin(AIN1pin, 1);
+	DWC->setPin(AIN2pin, 1);
+	DWC->setPin(BIN1pin, 1);
+	DWC->setPin(BIN2pin, 1);
+}
 
-// void DW640::oneStep(uint8_t stepper, uint8_t direction, uint8_t style) {
+void DW_Stepper::step(uint16_t steps, uint8_t dir,  uint8_t style) {
+  	uint32_t uspers = usperstep;
+  	uint8_t ret = 0;
 
-// }
+  	if (style == MICROSTEP) {
+    	uspers /= MICROSTEPS;
+    	steps *= MICROSTEPS;
+  	}
 
-// void DW640::step(uint8_t stepper, uint16_t steps, uint8_t direction, uint8_t style) {
+  	while (steps--) {
+    	ret = onestep(dir, style);
+    	delayMicroseconds(uspers);
+  	}
+}
 
-// }
+uint8_t DW_Stepper::onestep(uint8_t dir, uint8_t style) {
+  	uint8_t a, b, c, d;
+  	uint8_t ocrb, ocra;
 
-/* Private functions */
+  	ocra = ocrb = 255; // We're not using these for now
+
+  	// next determine what sort of stepping procedure we're up to
+  	if (style == DW_SINGLE) {
+    	if ((currentstep/(MICROSTEPS/2)) % 2) { // we're at an odd step, weird
+      		if (dir == DW_FORWARD) {
+				currentstep += MICROSTEPS/2;
+      		} else {
+				currentstep -= MICROSTEPS/2;
+      		}
+    	} else {           // go to the next even step
+      		if (dir == DW_FORWARD) {
+				currentstep += MICROSTEPS;
+      		} else {
+				currentstep -= MICROSTEPS;
+      		}
+    	}
+  	} else if (style == DW_DOUBLE) {
+    	if (! (currentstep/(MICROSTEPS/2) % 2)) { // we're at an even step, weird
+      		if (dir == DW_FORWARD) {
+				currentstep += MICROSTEPS/2;
+      		} else {
+				currentstep -= MICROSTEPS/2;
+      		}
+    	} else {           // go to the next odd step
+      		if (dir == DW_FORWARD) {
+				currentstep += MICROSTEPS;
+      		} else {
+				currentstep -= MICROSTEPS;
+      		}
+    	}
+  	}
+
+  	// Not tested this bit for now
+  	if (style == DW_MICROSTEP) {
+    	if (dir == DW_FORWARD) {
+      		currentstep++;
+    	} else {
+      		// BACKWARDS
+      		currentstep--;
+    	}
+
+    	currentstep += MICROSTEPS*4;
+    	currentstep %= MICROSTEPS*4;
+
+    	ocra = ocrb = 0;
+    	if ( (currentstep >= 0) && (currentstep < MICROSTEPS)) {
+      		ocra = microstepcurve[MICROSTEPS - currentstep];
+      		ocrb = microstepcurve[currentstep];
+    	} else if  ( (currentstep >= MICROSTEPS) && (currentstep < MICROSTEPS*2)) {
+      		ocra = microstepcurve[currentstep - MICROSTEPS];
+      		ocrb = microstepcurve[MICROSTEPS*2 - currentstep];
+    	} else if  ( (currentstep >= MICROSTEPS*2) && (currentstep < MICROSTEPS*3)) {
+      		ocra = microstepcurve[MICROSTEPS*3 - currentstep];
+      		ocrb = microstepcurve[currentstep - MICROSTEPS*2];
+    	} else if  ( (currentstep >= MICROSTEPS*3) && (currentstep < MICROSTEPS*4)) {
+      		ocra = microstepcurve[currentstep - MICROSTEPS*3];
+      		ocrb = microstepcurve[MICROSTEPS*4 - currentstep];
+    	}
+  	}
+
+  	currentstep += MICROSTEPS*4;
+  	currentstep %= MICROSTEPS*4;  
+
+  	// release all
+  	uint8_t latch_state = 0; // all motor pins to 0
+
+  	if (style == DW_MICROSTEP) {
+    	if ((currentstep >= 0) && (currentstep < MICROSTEPS))
+      		latch_state |= 0x03;
+    	if ((currentstep >= MICROSTEPS) && (currentstep < MICROSTEPS*2))
+      		latch_state |= 0x06;
+    	if ((currentstep >= MICROSTEPS*2) && (currentstep < MICROSTEPS*3))
+      		latch_state |= 0x0C;
+    	if ((currentstep >= MICROSTEPS*3) && (currentstep < MICROSTEPS*4))
+      		latch_state |= 0x09;
+  	} else {
+    	switch (currentstep/(MICROSTEPS/2)) {
+    		case 0:
+      				latch_state |= 0x1; // energize coil 1 only
+      				break;
+    		case 1:
+      				latch_state |= 0x3; // energize coil 1+2
+      				break;
+    		case 2:
+      				latch_state |= 0x2; // energize coil 2 only
+      				break;
+    		case 3:
+      				latch_state |= 0x6; // energize coil 2+3
+      				break;
+    		case 4:
+      				latch_state |= 0x4; // energize coil 3 only
+      				break; 
+    		case 5:
+      				latch_state |= 0xC; // energize coil 3+4
+      				break;
+    		case 6:
+      				latch_state |= 0x8; // energize coil 4 only
+      				break;
+    		case 7:
+      				latch_state |= 0x9; // energize coil 1+4
+      				break;
+    	}
+  	}
+
+	if (latch_state & 0x1) {
+    	DWC->setPin(AIN2pin, 1);
+  	} else {
+    	DWC->setPin(AIN2pin, 0);
+  	}
+  	if (latch_state & 0x2) {
+    	DWC->setPin(BIN1pin, 1);
+  	} else {
+    	DWC->setPin(BIN1pin, 0);
+  	}
+  	if (latch_state & 0x4) {
+    	DWC->setPin(AIN1pin, 1);
+  	} else {
+    	DWC->setPin(AIN1pin, 0);
+  	}
+  	if (latch_state & 0x8) {
+    	DWC->setPin(BIN2pin, 1);
+  	} else {
+    	DWC->setPin(BIN2pin, 0);
+  	}
+
+  	return currentstep;
+}
 

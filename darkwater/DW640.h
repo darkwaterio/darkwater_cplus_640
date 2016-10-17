@@ -1,6 +1,6 @@
 /*
 Dark Water 640 driver code is placed under the BSD license.
-Written by Team Dark Water (team@darkwater.io)
+Written by Team Dark Water (team@darkwater.io) based off libraries by Adafruit https://github.com/adafruit/Adafruit_Motor_Shield_V2_Library
 Copyright (c) 2014, Dark Water
 All rights reserved.
 
@@ -149,11 +149,6 @@ class DW640 {
         DW_Motor *getMotor(uint8_t motor);
         DW_Servo *getServo(uint8_t servo);      
         DW_Stepper *getStepper(uint16_t steps, uint8_t stepper);  
-
-        // void setStepperOff(uint8_t stepper);
-        // void setStepperSpeed(uint8_t stepper, uint16_t speed);
-        // void oneStep(uint8_t stepper, uint8_t direction, uint8_t style);
-        // void step(uint8_t stepper, uint16_t steps, uint8_t direction, uint8_t style = DW_SINGLE);
 
      private:
         uint8_t devAddr;
