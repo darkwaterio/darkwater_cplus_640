@@ -55,18 +55,18 @@ int main()
 	st3->setMotorSpeed(200);
 
 	printf("1 Forward\n");
-	st1->step( 400, DW_FORWARD, DW_DOUBLE );
+	st1->step( 400, DW_FORWARD, DW_SINGLE );
 	printf("2 Forward\n");
-	st2->step( 400, DW_FORWARD, DW_DOUBLE );
+	st2->step( 400, DW_FORWARD, DW_SINGLE );
 	printf("3 Forward\n");
-	st3->step( 400, DW_FORWARD, DW_DOUBLE );
+	st3->step( 400, DW_FORWARD, DW_SINGLE );
 
 	printf("1 Reverse\n");
-	st1->step( 400, DW_FORWARD, DW_DOUBLE );
+	st1->step( 400, DW_REVERSE, DW_SINGLE );
 	printf("2 Reverse\n");
-	st2->step( 400, DW_FORWARD, DW_DOUBLE );
+	st2->step( 400, DW_REVERSE, DW_SINGLE );
 	printf("3 Reverse\n");
-	st3->step( 400, DW_FORWARD, DW_DOUBLE );
+	st3->step( 400, DW_REVERSE, DW_SINGLE );
 	
 	st1->off();
 	st2->off();
