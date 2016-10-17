@@ -1,4 +1,4 @@
-MODULES = AccelGyroMag ADC AHRS Barometer FRAM GPS LED Multithread PPM-decoder Servo
+MODULES = AccelGyroMag Motor Stepper Multithread PPM-decoder Servo
 
 all:
 	for dir in $(MODULES); do \
