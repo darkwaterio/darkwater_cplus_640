@@ -1,4 +1,4 @@
-MODULES = AccelGyroMag Motor Stepper Multithread PPM-decoder Servo
+MODULES = AccelGyroMag Motor Stepper PPM-decoder Servo
 
 all:
 	for dir in $(MODULES); do \

@@ -434,10 +434,10 @@ void DW_Stepper::setMotorSpeed(uint16_t rpm) {
 }
 
 void DW_Stepper::off(void) {
-	DWC->setPin(AIN1pin, 1);
-	DWC->setPin(AIN2pin, 1);
-	DWC->setPin(BIN1pin, 1);
-	DWC->setPin(BIN2pin, 1);
+	DWC->setPin(AIN1pin, 0);
+	DWC->setPin(AIN2pin, 0);
+	DWC->setPin(BIN1pin, 0);
+	DWC->setPin(BIN2pin, 0);
 }
 
 void DW_Stepper::step(uint16_t steps, uint8_t dir,  uint8_t style) {
