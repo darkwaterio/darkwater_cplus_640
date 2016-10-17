@@ -72,9 +72,11 @@ void ppmOnEdge(int gpio, int level, uint32_t tick)
 
 			// RC output
 			for (int i = 0; i < ppmChannelsNumber; i++) {
-				// Sanity checks for values
-				if( channels[i] > 2000 ) channels[i] = 2000;
-				if( channels[i] < 1000 ) channels[i] = 1000;
+				// Because we aren't going to get exact readings as this may not be running with a RT kernel
+				// We need to add some sanity checks for values
+				if( channels[i] > 2000 ) channels[i] = 2000; // Set top forward speed
+				if( channels[i] < 1000 ) channels[i] = 1000; // Set top reverse speed
+				if( channels[i] < 1550 && channels[i] > 1450 ) channels[i] = 1500; // Add a dead band around center
 				// Set motor speed
 				motors[i]->setMotorSpeed( channels[i] );
 			}
