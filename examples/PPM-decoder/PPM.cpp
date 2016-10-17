@@ -1,38 +1,59 @@
 /*
-This code is provided under the BSD license.
+Example code is placed under the BSD license.
+Written by Team Dark Water (team@darkwater.io) - based on original by Emlid
 Copyright (c) 2014, Emlid Limited. All rights reserved.
 Written by Mikhail Avkhimenia (mikhail.avkhimenia@emlid.com)
 twitter.com/emlidtech || www.emlid.com || info@emlid.com
+All rights reserved.
 
-Application: PPM to PWM decoder for Raspberry Pi with Navio.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the Emlid Limited nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-Requres pigpio library, please install it first - http://abyz.co.uk/rpi/pigpio/
-To run this app navigate to the directory containing it and run following commands:
-make
-sudo ./PPM
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL EMLID LIMITED BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <pigpio.h>
 #include <stdio.h>
 #include <unistd.h>
 
-#include <darkwater/gpio.h>
-#include "darkwater/PCA9685.h"
+#include "darkwater/DW640.h"
 #include "darkwater/Util.h"
+#include <stdlib.h>
 
 //================================ Options =====================================
 
 unsigned int samplingRate      = 1;      // 1 microsecond (can be 1,2,4,5,10)
 unsigned int ppmInputGpio      = 4;      // PPM input on Navio's 2.54 header
 unsigned int ppmSyncLength     = 4000;   // Length of PPM sync pause
-unsigned int ppmChannelsNumber = 8;      // Number of channels packed in PPM
-unsigned int servoFrequency    = 50;     // Servo control frequency
+unsigned int ppmChannelsNumber = 6;      // Number of channels packed in PPM
+unsigned int motorFrequency    = 100;     // Servo control frequency
 bool verboseOutputEnabled      = true;   // Output channels values to console
 
 //============================ Objects & data ==================================
 
-PCA9685 *pwm;
-float channels[8];
+using namespace DarkWater;
+
+DW640 *dw;
+DW_Motor *motors[6];
+
+float channels[6];
 
 //============================== PPM decoder ===================================
 
@@ -50,8 +71,13 @@ void ppmOnEdge(int gpio, int level, uint32_t tick)
 			currentChannel = 0;
 
 			// RC output
-			for (int i = 0; i < ppmChannelsNumber; i++)
-			    pwm->setPWMuS(i + 3, channels[i]); // 1st Navio RC output is 3
+			for (int i = 0; i < ppmChannelsNumber; i++) {
+				// Sanity checks for values
+				if( channels[i] > 2000 ) channels[i] = 2000;
+				if( channels[i] < 1000 ) channels[i] = 1000;
+				// Set motor speed
+				motors[i]->setMotorSpeed( channels[i] );
+			}
 
 			// Console output
 			if (verboseOutputEnabled) {
@@ -68,33 +94,24 @@ void ppmOnEdge(int gpio, int level, uint32_t tick)
 
 //================================== Main ======================================
 
-using namespace Navio;
-
 int main(int argc, char *argv[])
 {
-    static const uint8_t outputEnablePin = RPI_GPIO_27;
-
     if (check_apm()) {
         return 1;
     }
     
-    Pin pin(outputEnablePin);
+    dw = new DWESCAPE();
+    dw->initialize();
+    dw->setFrequency(motorFrequency);
 
-    if (pin.init()) {
-        pin.setMode(Pin::GpioModeOutput);
-        pin.write(0); /* drive Output Enable low */
-    } else {
-        fprintf(stderr, "Output Enable not set. Are you root?");
-    }
-
-	// Servo controller setup
-
-	pwm = new PCA9685();
-	pwm->initialize();
-	pwm->setFrequency(servoFrequency);
+    motors[0] = dw->getMotor(1);
+    motors[1] = dw->getMotor(2);
+    motors[2] = dw->getMotor(3);
+    motors[3] = dw->getMotor(4);
+    motors[4] = dw->getMotor(5);
+    motors[5] = dw->getMotor(6);
 
 	// GPIO setup
-
 	gpioCfgClock(samplingRate, PI_DEFAULT_CLK_PERIPHERAL, 0); /* last parameter is deprecated now */
 	gpioInitialise();
 	previousTick = gpioTick();
