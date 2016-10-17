@@ -57,6 +57,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DW_ININ                   0
 #define DW_PHASE                  1
 
+#define MICROSTEPS 16         // 8 or 16
+
 using namespace DarkWater;
 
 class DW640;
@@ -95,6 +97,27 @@ class DW_Servo {
 
 };
 
+class DW_Stepper {
+    public:
+        DW_Stepper(void);
+        friend class DW640;
+
+        void off(void);
+        void setMotorSpeed(uint16_t speed);
+        uint8_t onestep(uint8_t dir, uint8_t style);
+        void step(uint16_t steps, uint8_t dir,  uint8_t style = DW_SINGLE);
+        uint32_t usperstep;
+
+    private:
+        uint8_t AIN1pin, AIN2pin;
+        uint8_t BIN1pin, BIN2pin;
+        uint16_t revsteps; // # steps per revolution
+        uint8_t currentstep;
+        uint8_t stepper;
+        DW640 *DWC;
+
+};
+
 class DW640 {
     public:
         DW640(uint8_t address = DW640_DEFAULT_ADDRESS);
@@ -124,7 +147,8 @@ class DW640 {
         void allOff();
 
         DW_Motor *getMotor(uint8_t motor);
-        DW_Servo *getServo(uint8_t servo);        
+        DW_Servo *getServo(uint8_t servo);      
+        DW_Stepper *getStepper(uint16_t steps, uint8_t stepper);  
 
         // void setStepperOff(uint8_t stepper);
         // void setStepperSpeed(uint8_t stepper, uint16_t speed);
@@ -140,17 +164,8 @@ class DW640 {
 
         DW_Motor motors[6];
         DW_Servo servos[2];
-
-        uint16_t revsteps; // # steps per revolution
-        uint8_t currentstep;
-
-        
-
+        DW_Stepper steppers[3];
 
 };
-
-// class DW_Stepper {
-
-// }
 
 #endif // DW640_H

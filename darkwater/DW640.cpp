@@ -29,6 +29,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "DW640.h"
 
+#if (MICROSTEPS == 8)
+uint8_t microstepcurve[] = {0, 50, 98, 142, 180, 212, 236, 250, 255};
+#elif (MICROSTEPS == 16)
+uint8_t microstepcurve[] = {0, 25, 50, 74, 98, 120, 141, 162, 180, 197, 212, 225, 236, 244, 250, 253, 255};
+#endif
+
 /** PCA9685 constructor.
  * @param address I2C address
  * @see DW640_DEFAULT_ADDRESS
@@ -274,6 +280,50 @@ DW_Servo *DW640::getServo(uint8_t servo) {
 
 	return &servos[servo];
 
+}
+
+DW_Stepper *DW640::getStepper(uint16_t steps, uint8_t stepper) {
+
+  	num--;
+
+  	uint8_t ain1, ain2, bin1, bin2;
+  
+  	// Get the stepper
+	switch(stepper) {
+		case 0:
+				ain1 = 2;
+				ain2 = 3;
+				bin1 = 4;
+				bin2 = 5;
+				break;
+		case 1:
+				ain1 = 6;
+				ain2 = 7;
+				bin1 = 8;
+				bin2 = 9;
+				break;
+		case 2:
+				ain1 = 10;
+				ain2 = 11;
+				bin1 = 12;
+				bin2 = 13;
+				break;
+		default:
+				fprintf(stderr, "Stepper number must be between 1 and 3 inclusive");
+	}
+
+	if (steppers[stepper].stepper == 0) {
+		// not init'd yet!
+		steppers[stepper].stepper = stepper;
+		steppers[stepper].revsteps = steps;
+		steppers[stepper].MC = this;
+
+		steppers[stepper].AIN1pin = ain1;
+		steppers[stepper].AIN2pin = ain2;
+		steppers[stepper].BIN1pin = bin1;
+		steppers[stepper].BIN2pin = bin2;
+	}
+	return &steppers[stepper];
 }
 
 /* Motors code */
