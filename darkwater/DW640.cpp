@@ -284,7 +284,7 @@ DW_Servo *DW640::getServo(uint8_t servo) {
 
 DW_Stepper *DW640::getStepper(uint8_t stepper, uint16_t steps) {
 
-  	num--;
+  	stepper--;
 
   	uint8_t ain1, ain2, bin1, bin2;
   
@@ -444,7 +444,7 @@ void DW_Stepper::step(uint16_t steps, uint8_t dir,  uint8_t style) {
   	uint32_t uspers = usperstep;
   	uint8_t ret = 0;
 
-  	if (style == MICROSTEP) {
+  	if (style == DW_MICROSTEP) {
     	uspers /= MICROSTEPS;
     	steps *= MICROSTEPS;
   	}
