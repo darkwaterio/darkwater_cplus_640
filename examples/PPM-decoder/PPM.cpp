@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
         return 1;
     }
     
-    dw = new DWESCAPE();
+    dw = new DW640();
     dw->initialize();
     dw->setFrequency(motorFrequency);
 
